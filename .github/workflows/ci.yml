@@ -39,4 +39,4 @@ jobs:
         shell: cmd
         run: |
           call package.bat
-          python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-dist.zip'); n=z.namelist(); assert 'src/ExportShipStatus/Main.py' in n and 'src/ExportShipStatus/core.py' in n and 'install.bat' in n and 'uninstall.bat' in n and 'LICENSE' in n and 'README.md' in n; print('package ok:', len(n), 'files')"
+          python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-dist.zip'); n=z.namelist(); assert 'src/ExportShipStatus/Main.py' in n and 'src/ExportShipStatus/core.py' in n and 'install.bat' in n and 'uninstall.bat' in n and 'LICENSE' in n and 'README.md' in n and any(x.endswith('official-approval.png') for x in n); print('package ok:', len(n), 'files')"

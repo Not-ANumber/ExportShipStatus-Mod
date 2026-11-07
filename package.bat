@@ -6,6 +6,7 @@ rem    install.bat / uninstall.bat / tools\find-game.ps1
 rem    src\ExportShipStatus\  (the mod itself)
 rem    README.md               (install guide)
 rem    LICENSE                 (MIT)
+rem    docs\images\official-approval.png
 rem  This packager ships the mod and its installer only.
 rem ============================================================
 setlocal EnableExtensions
@@ -20,6 +21,8 @@ copy /Y "install.bat" "%STAGE%\" >nul
 copy /Y "uninstall.bat" "%STAGE%\" >nul
 copy /Y "README.md" "%STAGE%\README.md" >nul
 copy /Y "LICENSE" "%STAGE%\LICENSE" >nul
+if not exist "%STAGE%\docs\images" mkdir "%STAGE%\docs\images"
+copy /Y "docs\images\official-approval.png" "%STAGE%\docs\images\" >nul
 if not exist "%STAGE%\tools" mkdir "%STAGE%\tools"
 copy /Y "tools\find-game.ps1" "%STAGE%\tools\" >nul
 if not exist "%STAGE%\src" mkdir "%STAGE%\src"

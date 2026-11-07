@@ -9,6 +9,13 @@
 > 配套的极简接收端、VTube Studio / OBS 特效桥和完整设计文档在另一个仓库：
 > **https://github.com/Not-ANumber/ExportShipStatus**
 
+> **官方批准 / Officially approved**
+>
+> ExportShipStatus 已通过官方模组审核。审核回复：
+> “Your ‘ExportShipStatus’ mod has been approved!”
+>
+> ![官方批准截图](docs/images/official-approval.png)
+
 ## 功能
 
 - **血量快照（1 Hz）**：`health` / `max_health` / `hp_pct` / `alive`，含满血哨兵值修正；
@@ -113,6 +120,7 @@ tools\find-game.ps1
 src\ExportShipStatus\   （模组本体）
 README.md               （本说明）
 LICENSE                 （MIT）
+docs\images\official-approval.png
 ```
 
 适合分发给其他玩家；对方解压后双击 `install.bat` 即可。
