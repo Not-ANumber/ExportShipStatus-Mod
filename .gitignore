@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.venv/
+venv/
+.python-version
+
+# Runtime / test fixtures
+*.jsonl
+fakegame/
+
+# Build artifacts
+ExportShipStatus-dist.zip
+dist/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,18 @@
+* text=auto
+
+# Windows scripts must keep CRLF
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+
+# Python / docs
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary assets
+*.png binary
+*.gif binary
+*.jpg binary
+*.zip binary

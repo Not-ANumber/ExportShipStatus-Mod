@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile Python sources
+        run: python -m compileall -q src
+
+      - name: Installer smoke test
+        shell: cmd
+        run: |
+          mkdir fakegame\bin\99999999\res_mods
+          call install.bat "%CD%\fakegame"
+          if not exist "fakegame\bin\99999999\res_mods\PnFMods\ExportShipStatus\Main.py" exit /b 1
+          if not exist "fakegame\bin\99999999\res_mods\PnFModsLoader.py" exit /b 1
+          call uninstall.bat "%CD%\fakegame"
+          if exist "fakegame\bin\99999999\res_mods\PnFMods\ExportShipStatus" exit /b 1
+
+      - name: Package smoke test
+        shell: cmd
+        run: |
+          call package.bat
+          python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-dist.zip'); n=z.namelist(); assert 'src/ExportShipStatus/Main.py' in n and 'src/ExportShipStatus/core.py' in n and 'install.bat' in n and 'uninstall.bat' in n and 'LICENSE' in n and 'README.md' in n; print('package ok:', len(n), 'files')"
