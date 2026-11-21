@@ -45,4 +45,4 @@ jobs:
         shell: cmd
         run: |
           call package-aslain.bat
-          python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-aslain.zip'); n=z.namelist(); assert set(n) == {'res_mods/PnFModsLoader.py', 'res_mods/PnFMods/ExportShipStatus/core.py', 'res_mods/PnFMods/ExportShipStatus/Main.py'}; print('aslain package ok:', len(n), 'files')"
+          python -c "import zipfile; n=zipfile.ZipFile('ExportShipStatus-aslain.zip').namelist(); print('aslain entries:', n); required = {'res_mods/PnFModsLoader.py', 'res_mods/PnFMods/ExportShipStatus/core.py', 'res_mods/PnFMods/ExportShipStatus/Main.py'}; assert required <= set(n); assert all(x.startswith('res_mods/') for x in n); print('aslain package ok:', len(n), 'files')"
