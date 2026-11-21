@@ -40,3 +40,9 @@ jobs:
         run: |
           call package.bat
           python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-dist.zip'); n=z.namelist(); assert 'src/ExportShipStatus/Main.py' in n and 'src/ExportShipStatus/core.py' in n and 'install.bat' in n and 'uninstall.bat' in n and 'LICENSE' in n and 'README.md' in n and any(x.endswith('official-approval.png') for x in n); print('package ok:', len(n), 'files')"
+
+      - name: Aslain package smoke test
+        shell: cmd
+        run: |
+          call package-aslain.bat
+          python -c "import zipfile; z=zipfile.ZipFile('ExportShipStatus-aslain.zip'); n=z.namelist(); assert set(n) == {'res_mods/PnFModsLoader.py', 'res_mods/PnFMods/ExportShipStatus/core.py', 'res_mods/PnFMods/ExportShipStatus/Main.py'}; print('aslain package ok:', len(n), 'files')"

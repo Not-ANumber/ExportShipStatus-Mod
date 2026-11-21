@@ -5,7 +5,7 @@
 对局中把**你自己舰船**的血量、起火/进水状态与受伤事件实时写入 JSON Lines 文件，
 供同机程序读取。基于官方 PnFMods Mods API，纯后台、无游戏内界面。
 
-> 本仓库只包含**模组本体**与**安装 / 卸载 / 打包脚本**。
+> 本仓库包含**模组本体**、**安装 / 卸载 / 打包脚本**，以及预构建的 **Aslain 导入包**。
 > 配套的极简接收端、VTube Studio / OBS 特效桥和完整设计文档在另一个仓库：
 > **https://github.com/Not-ANumber/ExportShipStatus**
 
@@ -60,6 +60,35 @@ install.bat "D:\Games\World_of_Warships"
 > **每次游戏大更新后重跑 `install.bat`**。更新会新建 `bin\<新版本>` 目录，且新目录的
 > `res_mods` 是空的；缺少 `PnFModsLoader.py` 时所有 PnFMods 模组都不会被加载。
 
+## 通过 Aslain 安装（可选）
+
+如果你已经在用 Aslain 的《战舰世界》Modpack / Mod Manager，可以直接使用仓库根目录的
+[`ExportShipStatus-aslain.zip`](ExportShipStatus-aslain.zip)，不必再运行 `install.bat`。
+
+包内结构（已按 Aslain 自定义 mod 规则打好）：
+
+```text
+res_mods/
+├─ PnFModsLoader.py                  （0 字节加载开关）
+└─ PnFMods/ExportShipStatus/
+   ├─ Main.py
+   └─ core.py
+```
+
+两种用法：
+
+- **新版 Aslain's WoWs Mod Manager**：把 zip 放进 `<游戏根>\Aslain_custom_mods\`，
+  或在应用里 **Settings → Custom mods → Add mods...** 导入，然后 **Install / Apply**；
+- **经典 Aslain Modpack Installer**：把 zip 放进 `<游戏根>\Aslain_Modpack\Custom_mods\`，
+  正常运行安装器。
+
+两套产品都会在最后把它解压到 `bin\<当前 build>\res_mods\`；Manager 在下一次 Apply 时
+自动重新应用，经典安装器在每次运行时重新应用。包内不带版本号目录，因此同时兼容两套。
+完整的格式规则、路径映射和排错见 [`docs/ASLAIN-IMPORT.md`](docs/ASLAIN-IMPORT.md)。
+
+> 包里的 `PnFModsLoader.py` 是 0 字节加载开关。若你已有非空的第三方加载器，
+> 请从 zip 中删除该文件，避免覆盖。
+
 ## 使用
 
 开一局（训练房即可）。进入战斗后，模组开始写入：
@@ -108,6 +137,8 @@ uninstall.bat "D:\Games\World_of_Warships"
 
 ## 自行打包
 
+### 独立安装包
+
 ```bat
 package.bat
 ```
@@ -125,6 +156,16 @@ docs\images\official-approval.png
 
 适合分发给其他玩家；对方解压后双击 `install.bat` 即可。
 
+### Aslain 导入包
+
+```bat
+package-aslain.bat
+```
+
+生成 `ExportShipStatus-aslain.zip`，结构见上文。脚本使用
+`tools\make-aslain-zip.ps1` 写入标准 `/` 路径分隔符，避免 Windows PowerShell 5.1
+的 `Compress-Archive` 生成反斜杠条目；仓库中已附带一份可直接使用的预构建 zip。
+
 ## 仓库结构
 
 ```text
@@ -132,10 +173,17 @@ ExportShipStatus-Mod/
 ├─ src/ExportShipStatus/
 │  ├─ Main.py        模组入口：订阅战斗事件
 │  └─ core.py        生命周期、快照、状态轮询、伤害事件、JSONL 输出
-├─ tools/find-game.ps1   安装脚本的路径探测与最新 bin 目录定位
+├─ tools/
+│  ├─ find-game.ps1       安装脚本的路径探测与最新 bin 目录定位
+│  └─ make-aslain-zip.ps1 Aslain 包的标准 ZIP 打包
+├─ docs/
+│  ├─ ASLAIN-IMPORT.md    Aslain 自定义 mod 规则与使用说明
+│  └─ images/official-approval.png
+├─ ExportShipStatus-aslain.zip  预构建的 Aslain 导入包
 ├─ install.bat           安装
 ├─ uninstall.bat         卸载
-├─ package.bat           生成分发 zip
+├─ package.bat           生成独立分发 zip
+├─ package-aslain.bat    生成 Aslain 导入 zip
 └─ .github/workflows/ci.yml
 ```
 
@@ -153,8 +201,8 @@ ExportShipStatus-Mod/
 python -m compileall -q src
 ```
 
-CI 会在 Windows runner 上执行语法检查，并用临时假游戏目录跑一遍
-`install.bat` / `uninstall.bat` 的冒烟测试。
+CI 会在 Windows runner 上执行语法检查，用临时假游戏目录跑一遍
+`install.bat` / `uninstall.bat` 的冒烟测试，并校验 Aslain 包结构。
 
 ## 合规与免责声明
 
